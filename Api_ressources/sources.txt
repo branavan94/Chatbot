@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-https://musicmachinery.com/music-apis/
 
-
-=======
 https://musicmachinery.com/music-apis/
 
 
