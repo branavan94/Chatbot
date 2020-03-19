@@ -17,13 +17,22 @@ server.use(express.json());
 server.post('/',
 	((req, res, next) => {
 		return f.incoming(req,res, async data =>{
-			await f.txt(data.sender,data.content)
+			 await f.txt(data.sender,data.content);
+			
 
 	});
 	}));
 server.listen(PORT,() => console.log(`The bot server is running on port ${PORT}`));
 
-//Find from music name
-api.findmusic("baby").then((data) => {
-});
 
+//Find from music name
+api.findmusic("hi").then((result) => {});
+api.findalbum("hi").then((result) => {});
+var input = {artist : "Lana Del Rey",
+			album : "Norman Fucking Rockwell"}
+input.artist = input.artist.replace(" ","%20").trim();
+input.album = input.album.replace(" ","%20").trim();
+api.datealbum(input).then((result) => {
+	console.log(result);
+
+});
