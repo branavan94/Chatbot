@@ -17,6 +17,7 @@
     "localtunnel": "^2.0.0",
     "ngrok": "^3.2.7",
     "request": "^2.88.2",
-    "restify": "^8.5.1"
+    "restify": "^8.5.1",
+    "xregexp": "^4.3.0"
   }
 }
