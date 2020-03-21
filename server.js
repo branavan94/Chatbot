@@ -22,30 +22,36 @@ server.post('/',
 				switch(cb.intent){
           				case "WhoMadeTrack":
           					result = await api.findmusic(cb.entities.track.replace(/ /g,"%20").trim());
+          					if(result.artist[0] == undefined){await f.txt(data.sender,"I'm sorry i didn't quite understand.");break;}
           					await f.txt(data.sender,`Well my first guess would be ${result.artist[0]} who sang \"${result.name[0]}\".\n Here are some other suggestions: \n${result.artist[1]} who made ${result.name[1]}\n${result.artist[2]} who made ${result.name[2]}`);
          					break;
          				case "WhoMadeAlbum":
           					result = await api.findalbum(cb.entities.album.replace(/ /g,"%20").trim());
+          					if(result.artist[0] == undefined){await f.txt(data.sender,"I'm sorry i didn't quite understand.");break;}
           					await f.txt(data.sender,`Well my first guess would be ${result.artist[0]} who made the album \"${result.name[0]}\".\n Here are some other suggestions: \n-${result.artist[1]} who made ${result.name[1]}\n-${result.artist[2]} who made ${result.name[2]}`);
          					break;
          				case "ReleaseDate":
           					result = await api.datealbum({album : cb.entities.album.replace(/ /g,"%20").trim(),
           													artist : cb.entities.artist.replace(/ /g,"%20").trim()});
+          					if(result.artist[0] == undefined){await f.txt(data.sender,"I'm sorry i didn't quite understand.");break;}
           					await f.txt(data.sender,`The album \"${result.name[0]}\" was released on ${result.date[0]} by ${result.artist[0]}.`);
           					await f.img(data.sender,result.images)
          					break;
          				case "InfoTrack":
           					result = await api.infomusic({track : cb.entities.track.replace(/ /g,"%20").trim(),
           													artist : cb.entities.artist.replace(/ /g,"%20").trim()});
+          					if(result.artist == undefined){await f.txt(data.sender,"I'm sorry i didn't quite understand.");break;}
           					await f.txt(data.sender,`The music \"${result.name[0]}\" comes from the album ${result.album} by ${result.artist}.\n${result.summary}`);
           					await f.img(data.sender,result.images)
          					break;
          				case "InfoArtist":
           					result = await api.infoartist(cb.entities.artist.replace(/ /g,"%20").trim());
+          					if(result.summary == undefined){await f.txt(data.sender,"I'm sorry i didn't quite understand.");break;}
           					await f.txt(data.sender,result.summary);
          					break;
          				case "Recommendation":
           					result = await api.recommendation(cb.entities.artist.replace(/ /g,"%20").trim());
+          					if(result.name[0] == undefined){await f.txt(data.sender,"I'm sorry i didn't quite understand.");break;}
           					await f.txt(data.sender,`Here are some recommendations :\n${result.name[0]}\n${result.name[1]}\n${result.name[2]}`);
          					break;
          				case "Top5Artist":
@@ -59,6 +65,8 @@ server.post('/',
          				case "Hello":
           					f.txt(data.sender,`${cb.entities.greeting} dear user !`);
           					break;
+          				default:
+          					f.txt(data.sender, "I'm not sure i understand what you've just said. Could you rephrase ? ")
 
 				}
 

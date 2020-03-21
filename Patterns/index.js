@@ -13,7 +13,7 @@ const patternDict = [
 		intent : "ReleaseDate"
 	},
 	{
-		pattern : "\\b(give me|do you have) (some information|info|summary|description) (about|on|of) (?<track>.+) (from) (?<artist>.+)\\b",
+		pattern : "\\b(give me|do you have|any) (informations|some informations|info|summary|description) (about|on|of) (?<track>.+) (from) (?<artist>.+)\\b",
 		intent : "InfoTrack"
 	},
 	{
@@ -21,7 +21,7 @@ const patternDict = [
 		intent : "InfoArtist"
 	},
 	{
-		pattern : "\\b(give me|do you have) (some recommendations|similarity) (that look like|like) (?<artist>.+)\\b",
+		pattern : "\\b(give me|do you have) (recommendations|some recommendations|similarity) (that look like|like) (?<artist>.+)\\b",
 		intent : "Recommendation"
 	},
 	{
