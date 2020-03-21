@@ -16,14 +16,72 @@ server.get('/', (req, res) => {
 server.use(express.json());
 server.post('/',
 	((req, res, next) => {
-		return f.incoming(req,res, async data =>{
-			 matcher(data.content, async cb => {
+		f.incoming(req,res, async data =>{
+			var result;
+			  matcher(data.content, async cb => {
 				switch(cb.intent){
-					    case "Hello":
-          					await f.txt(data.sender,`${cb.entities.greeting} dear user !`);
-          					break;
           				case "WhoMadeTrack":
-          					await api.findmusic(cb.entities.track).then((result) => {
+          					result = await api.findmusic(cb.entities.track.replace(/ /g,"%20").trim());
+          					await f.txt(data.sender,`Well my first guess would be ${result.artist[0]} who sang \"${result.name[0]}\".\n Here are some other suggestions: \n${result.artist[1]} who made ${result.name[1]}\n${result.artist[2]} who made ${result.name[2]}`);
+         					break;
+         				case "WhoMadeAlbum":
+          					result = await api.findalbum(cb.entities.album.replace(/ /g,"%20").trim());
+          					await f.txt(data.sender,`Well my first guess would be ${result.artist[0]} who made the album \"${result.name[0]}\".\n Here are some other suggestions: \n-${result.artist[1]} who made ${result.name[1]}\n-${result.artist[2]} who made ${result.name[2]}`);
+         					break;
+         				case "ReleaseDate":
+          					result = await api.datealbum({album : cb.entities.album.replace(/ /g,"%20").trim(),
+          													artist : cb.entities.artist.replace(/ /g,"%20").trim()});
+          					await f.txt(data.sender,`The album \"${result.name[0]}\" was released on ${result.date[0]} by ${result.artist[0]}.`);
+          					await f.img(data.sender,result.images)
+         					break;
+         				case "InfoTrack":
+          					result = await api.infomusic({track : cb.entities.track.replace(/ /g,"%20").trim(),
+          													artist : cb.entities.artist.replace(/ /g,"%20").trim()});
+          					await f.txt(data.sender,`The music \"${result.name[0]}\" comes from the album ${result.album} by ${result.artist}.\n${result.summary}`);
+          					await f.img(data.sender,result.images)
+         					break;
+         				case "InfoArtist":
+          					result = await api.infoartist(cb.entities.artist.replace(/ /g,"%20").trim());
+          					await f.txt(data.sender,result.summary);
+         					break;
+         				case "Recommendation":
+          					result = await api.recommendation(cb.entities.artist.replace(/ /g,"%20").trim());
+          					await f.txt(data.sender,`Here are some recommendations :\n${result.name[0]}\n${result.name[1]}\n${result.name[2]}`);
+         					break;
+         				case "Top5Artist":
+         					result = await api.topartist();
+          					await f.txt(data.sender,`Here are the top 5 artists of the moment :\n${result[0]}\n${result[1]}\n${result[2]}\n${result[3]}\n${result[4]}`);
+         					break;
+         				case "Top5Track":
+         					result = await api.toptrack();
+          					await f.txt(data.sender,`Here are the top 5 artists of the moment :\n${result[0]}\n${result[1]}\n${result[2]}\n${result[3]}\n${result[4]}`);
+         					break;
+         				case "Hello":
+          					f.txt(data.sender,`${cb.entities.greeting} dear user !`);
+          					break;
+
+				}
+
+			})
+			 //await f.txt(data.sender,data.content);
+			});
+	}));
+server.listen(PORT,() => console.log(`The bot server is running on port ${PORT}`));
+//Find from music name
+//DONT FORGER TO REPLACE AND TRIM INPUT
+
+var input = {artist : "Lana Del Rey",
+			album : "Norman Fucking Rockwell",
+			track : "Love"}
+input.artist = input.artist.replace(/ /g,"%20").trim();
+input.album = input.album.replace(/ /g,"%20").trim();
+input.track = input.track.replace(/ /g,"%20").trim();
+api.topartist().then((result => {}));
+api.toptrack().then((result => {}));
+
+
+/*
+          					 api.findmusic(cb.entities.track).then((result) => {
           						var response = "Let me make you some suggestions about your music. Here are the artists that I found on the internet:\n"
           						var data = ""
           						for (var i = 0; i < result.name.length; i++)
@@ -36,36 +94,5 @@ server.post('/',
           						}
           						var answer = response.concat(data);
           						f.txt(data.sender,answer);
-								console.log(answer)
-          					})
-          					.catch(error => {
-            									console.log(error)
-          									})
-          					break;
-
-				}
-
-			})
-			 //await f.txt(data.sender,data.content);
-			
-
-	});
-	}));
-server.listen(PORT,() => console.log(`The bot server is running on port ${PORT}`));
-//Find from music name
-//DONT FORGER TO REPLACE AND TRIM INPUT
-
-var input = {artist : "Lana Del Rey",
-			album : "Norman Fucking Rockwell",
-			track : "Love"}
-input.artist = input.artist.replace(/ /g,"%20").trim();
-input.album = input.album.replace(/ /g,"%20").trim();
-input.track = input.track.replace(/ /g,"%20").trim();
-api.findmusic("hi").then((result) => {});
-api.findalbum("hi").then((result) => {});
-api.datealbum(input).then((result) => {});
-api.infomusic(input).then((result) => {});
-api.infoartist(input.artist).then((result)=> {});
-api.recommendation(input.artist).then((result => {}));
-api.topartist().then((result => {}));
-api.toptrack().then((result => {}));
+          					}).catch(error => {console.log(error)})
+          					*/

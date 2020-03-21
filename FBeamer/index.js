@@ -109,7 +109,7 @@ class FBeamer {
 					reject(error);
 				}
 			});
-		});
+		}).catch(error => console.log(error))
 	}
 
 	// Send a text message
@@ -124,7 +124,7 @@ class FBeamer {
 			}
 		}
 
-		return this.sendMessage(obj);
+		this.sendMessage(obj);
 	}
 
 	// Send an image message

@@ -1,10 +1,6 @@
 //Pattern dictionnary
 const patternDict = [
 	{
-		pattern : "\\b(?<greeting>Hi|Hello|Hey)\\b",
-		intent : "Hello"
-	},
-	{
 		pattern : "\\b(who) (made|sing) (the) (track|song) (?<track>.+)\\b",
 		intent : "WhoMadeTrack"
 	},
@@ -17,7 +13,7 @@ const patternDict = [
 		intent : "ReleaseDate"
 	},
 	{
-		pattern : "\\b(give me|do you have) (information|info|summary|description) (about|on|of) (?<track>.+) (from) (?<artist>.+)\\b",
+		pattern : "\\b(give me|do you have) (some information|info|summary|description) (about|on|of) (?<track>.+) (from) (?<artist>.+)\\b",
 		intent : "InfoTrack"
 	},
 	{
@@ -25,7 +21,7 @@ const patternDict = [
 		intent : "InfoArtist"
 	},
 	{
-		pattern : "\\b(give me|do you have) (recommendations|similarity) (that look like) (?<artist>.+)\\b",
+		pattern : "\\b(give me|do you have) (some recommendations|similarity) (that look like|like) (?<artist>.+)\\b",
 		intent : "Recommendation"
 	},
 	{
@@ -35,6 +31,10 @@ const patternDict = [
 	{
 		pattern : "\\b(top 5 tracks)\\b",
 		intent : "Top5Track"
+	},
+	{
+		pattern : "\\b(?<greeting>Hi|Hello|Hey)\\b",
+		intent : "Hello"
 	}
 ];
 module.exports = patternDict;

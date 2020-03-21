@@ -53,6 +53,8 @@ module.exports.datealbum = async input => await api(`/2.0/?method=album.getInfo&
 	artist.push(result.artist);
 	name.push(result.name);
 	images = result.image;
+	const keys = Object.values(images[0])
+	images = keys[0]
 	tags = result.tags;
 	date.push(result.wiki.published);
 	summary.push(result.wiki.content);
@@ -72,7 +74,9 @@ module.exports.infomusic = async input => await api(`/2.0/?method=track.getInfo&
 	var album = [];
 	var result = JSON.parse(response.body);
 	name.push(result.track.name);
-	images.push(result.track.album.image);
+	images = result.track.album.image;
+	const keys = Object.values(images[0])
+	images = keys[0]
 	artist.push(result.track.album.artist);
 	album.push(result.track.album.title);
 	var content = result.track.wiki.content;
@@ -104,8 +108,7 @@ module.exports.recommendation = async input => await api(`/2.0/?method=artist.ge
 	});
 	return ({name});
 });
-module.exports.topartist = async function(){
- await api(`/2.0/?method=chart.getTopArtists&limit=5&api_key=bbc37f76eabbc9c12c5269605bc9e928&format=json`).then((data) => {
+module.exports.topartist = async () => await api(`/2.0/?method=chart.getTopArtists&limit=5&api_key=bbc37f76eabbc9c12c5269605bc9e928&format=json`).then((data) => {
 	const response = {
 		statusCode: 200,
 		body: JSON.stringify(data),
@@ -115,11 +118,10 @@ module.exports.topartist = async function(){
 	result.artists.artist.forEach(obj =>{
 		name.push(obj.name.toLowerCase());
 	});
-	return ({name});
+	return name;
 });
-}
-module.exports.toptrack = async function(){
- await api(`/2.0/?method=chart.getTopTracks&limit=5&api_key=bbc37f76eabbc9c12c5269605bc9e928&format=json`).then((data) => {
+
+module.exports.toptrack = async () => await api(`/2.0/?method=chart.getTopTracks&limit=5&api_key=bbc37f76eabbc9c12c5269605bc9e928&format=json`).then((data) => {
 	const response = {
 		statusCode: 200,
 		body: JSON.stringify(data),
@@ -129,9 +131,8 @@ module.exports.toptrack = async function(){
 	result.tracks.track.forEach(obj =>{
 		name.push(obj.name.toLowerCase());
 	});
-	return ({name});
+	return (name);
 });
-}
 
 
 
